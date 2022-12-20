@@ -2,7 +2,7 @@
 
 Fork from https://github.com/LeapLabTHU/DAT
 
-Modify the code to evaluate without using the training dataset.
+Modify the code to perform evaluation without using the training dataset.
 
 ## Implementation Environment:
 
