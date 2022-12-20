@@ -23,26 +23,26 @@ from torch.utils.data import DataLoader
     
 def build_loader(config):
     config.defrost()
-    dataset_train, config.MODEL.NUM_CLASSES = build_dataset(is_train=True, config=config)
+    config.MODEL.NUM_CLASSES = 1000
     config.freeze()
-    print(f"local rank {config.LOCAL_RANK} / global rank {dist.get_rank()} successfully build train dataset")
+    #print(f"local rank {config.LOCAL_RANK} / global rank {dist.get_rank()} successfully build train dataset")
     dataset_val, _ = build_dataset(is_train=False, config=config)
     print(f"local rank {config.LOCAL_RANK} / global rank {dist.get_rank()} successfully build val dataset")
     num_tasks = dist.get_world_size()
     global_rank = dist.get_rank()  
-    sampler_train = torch.utils.data.DistributedSampler(
+    '''sampler_train = torch.utils.data.DistributedSampler(
         dataset_train, num_replicas=num_tasks, rank=global_rank, shuffle=True
-    )
+    )'''
     indices = np.arange(dist.get_rank(), len(dataset_val), dist.get_world_size())
     sampler_val = SubsetRandomSampler(indices)
 
-    data_loader_train = DataLoader(
+    '''data_loader_train = DataLoader(
         dataset_train, sampler=sampler_train,
         batch_size=config.DATA.BATCH_SIZE,
         num_workers=config.DATA.NUM_WORKERS,
         pin_memory=config.DATA.PIN_MEMORY,
         drop_last=True,
-    )
+    )'''
 
     data_loader_val = DataLoader(
         dataset_val, sampler=sampler_val,
@@ -62,7 +62,7 @@ def build_loader(config):
             prob=config.AUG.MIXUP_PROB, switch_prob=config.AUG.MIXUP_SWITCH_PROB, mode=config.AUG.MIXUP_MODE,
             label_smoothing=config.MODEL.LABEL_SMOOTHING, num_classes=config.MODEL.NUM_CLASSES)
 
-    return dataset_train, dataset_val, data_loader_train, data_loader_val, mixup_fn
+    return dataset_val, data_loader_val, mixup_fn
 
 
 def build_dataset(is_train, config):
