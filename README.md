@@ -2,8 +2,6 @@
 
 Fork from https://github.com/LeapLabTHU/DAT
 
-## Goal:
-
 Modify the code to evaluate without using the training dataset.
 
 ## Implementation Environment:
