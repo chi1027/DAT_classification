@@ -101,7 +101,7 @@ def main():
     # print config
     logger.info(config.dump())
     
-    dataset_val, data_loader_val, mixup_fn = build_loader(config) #change
+    dataset_val, data_loader_val, mixup_fn = build_loader(config) #changed
 
     logger.info(f"Creating model:{config.MODEL.TYPE}/{config.MODEL.NAME}")
     model = build_model(config)
@@ -113,7 +113,7 @@ def main():
     model = nn.parallel.DistributedDataParallel(model, device_ids=[local_rank], broadcast_buffers=True, find_unused_parameters=False)
     model_without_ddp = model.module
     
-    lr_scheduler = build_scheduler(config, optimizer, len(data_loader_val)) #change
+    lr_scheduler = build_scheduler(config, optimizer, len(data_loader_val)) #changed
 
     if config.AUG.MIXUP > 0.:
         # smoothing is handled with mixup label transform
